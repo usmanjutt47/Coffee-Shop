@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import { View, Image, Text, StyleSheet, Pressable } from "react-native";
 import Colors from "../constants/colors";
-import { FontAwesome6 } from "@expo/vector-icons";
+import { AntDesign, FontAwesome6 } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
 
 const BeanCoffeeDetail = ({ route }) => {
+  const navigation = useNavigation();
   const [selectedSize, setSelectedSize] = useState("250gm");
   const { image, title, description, price } = route.params;
 
@@ -40,6 +42,27 @@ const BeanCoffeeDetail = ({ route }) => {
               </Pressable>
             </View>
           </View>
+        </View>
+        <View
+          style={{
+            position: "absolute",
+            top: 10,
+            width: "90%",
+            alignSelf: "center",
+            marginTop: "8%",
+            justifyContent: "space-between",
+            flexDirection: "row",
+          }}
+        >
+          <Pressable
+            style={styles.backContainer}
+            onPress={() => navigation.goBack()}
+          >
+            <AntDesign name="left" size={24} color="#828590" />
+          </Pressable>
+          <Pressable style={styles.backContainer}>
+            <AntDesign name="heart" size={24} color="#828590" />
+          </Pressable>
         </View>
       </View>
       <View style={{ flex: 1, backgroundColor: "#121520" }}>
@@ -255,6 +278,14 @@ const styles = StyleSheet.create({
     color: Colors.white,
     fontWeight: "bold",
     fontSize: 16,
+  },
+  backContainer: {
+    height: 40,
+    width: 40,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#21262E",
+    borderRadius: 10,
   },
 });
 
