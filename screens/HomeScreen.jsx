@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import {
   FlatList,
   Image,
-  Pressable,
   ScrollView,
   StyleSheet,
   Text,
@@ -14,6 +13,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import Colors from "../constants/colors";
 import { StatusBar } from "expo-status-bar";
 import AntDesign from "@expo/vector-icons/AntDesign";
+import { useNavigation } from "@react-navigation/native";
 
 const DATA = [
   { id: "1", title: "All" },
@@ -22,10 +22,6 @@ const DATA = [
   { id: "4", title: "Americano" },
   { id: "5", title: "Latte" },
   { id: "6", title: "Mocha" },
-  { id: "7", title: "Macchiato" },
-  { id: "8", title: "Flat White" },
-  { id: "9", title: "Ristretto" },
-  { id: "10", title: "Affogato" },
 ];
 
 const categoryImg = [
@@ -56,8 +52,14 @@ const categoryImg = [
 ];
 
 const CoffeeCard = ({ coffee }) => {
+  const navigation = useNavigation();
+
+  const handlePress = () => {
+    navigation.navigate("Detail", { coffee });
+  };
+
   return (
-    <Pressable style={styles.cardContainer}>
+    <TouchableOpacity style={styles.cardContainer} onPress={handlePress}>
       <View style={styles.imageContainer}>
         <Image source={{ uri: coffee.image }} style={styles.coffeeImage} />
         <View style={styles.ratingContainer}>
@@ -86,7 +88,7 @@ const CoffeeCard = ({ coffee }) => {
           </TouchableOpacity>
         </View>
       </View>
-    </Pressable>
+    </TouchableOpacity>
   );
 };
 
@@ -115,8 +117,17 @@ const categoryBeans = [
 ];
 
 const BeanCoffeeCard = ({ beanCoffee }) => {
+  const navigation = useNavigation();
+  const handlePress = () => {
+    navigation.navigate("BeanCoffeeDetail", {
+      image: beanCoffee.image1,
+      title: beanCoffee.title,
+      description: beanCoffee.description,
+      price: beanCoffee.price,
+    });
+  };
   return (
-    <Pressable style={styles.cardContainer}>
+    <TouchableOpacity style={styles.cardContainer} onPress={handlePress}>
       <View style={styles.imageContainer}>
         <Image source={{ uri: beanCoffee.image1 }} style={styles.coffeeImage} />
       </View>
@@ -141,7 +152,7 @@ const BeanCoffeeCard = ({ beanCoffee }) => {
           </TouchableOpacity>
         </View>
       </View>
-    </Pressable>
+    </TouchableOpacity>
   );
 };
 
