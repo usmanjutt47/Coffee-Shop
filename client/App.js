@@ -1,6 +1,10 @@
 import { StyleSheet } from "react-native";
 import React from "react";
-import { NavigationContainer } from "@react-navigation/native";
+import {
+  NavigationContainer,
+  useNavigation,
+  useNavigationState,
+} from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import HomeScreen from "./screens/HomeScreen";
@@ -16,6 +20,15 @@ const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
 function TabNavigator() {
+  const navigation = useNavigation();
+  const activeScreen = useNavigationState(
+    (state) => state.routes[state.index].name
+  );
+
+  const handleNavigation = (screen) => {
+    navigation.navigate(screen);
+  };
+
   return (
     <Tab.Navigator
       screenOptions={{
@@ -37,9 +50,16 @@ function TabNavigator() {
         component={HomeScreen}
         options={{
           tabBarIcon: ({ color }) => (
-            <Entypo name="home" size={24} color={color} />
+            <Entypo
+              name="home"
+              size={24}
+              color={activeScreen === "HomeScreen" ? "#D17842" : color}
+            />
           ),
           tabBarLabel: () => null,
+        }}
+        listeners={{
+          tabPress: () => handleNavigation("HomeScreen"),
         }}
       />
       <Tab.Screen
@@ -47,9 +67,16 @@ function TabNavigator() {
         component={CartScreen}
         options={{
           tabBarIcon: ({ color }) => (
-            <FontAwesome6 name="bag-shopping" size={24} color={color} />
+            <FontAwesome6
+              name="bag-shopping"
+              size={24}
+              color={activeScreen === "CartScreen" ? "#D17842" : color}
+            />
           ),
           tabBarLabel: () => null,
+        }}
+        listeners={{
+          tabPress: () => handleNavigation("CartScreen"),
         }}
       />
       <Tab.Screen
@@ -57,9 +84,16 @@ function TabNavigator() {
         component={FavoriteScreen}
         options={{
           tabBarIcon: ({ color }) => (
-            <AntDesign name="heart" size={24} color={color} />
+            <AntDesign
+              name="heart"
+              size={24}
+              color={activeScreen === "FavoriteScreen" ? "#D17842" : color}
+            />
           ),
           tabBarLabel: () => null,
+        }}
+        listeners={{
+          tabPress: () => handleNavigation("FavoriteScreen"),
         }}
       />
       <Tab.Screen
@@ -67,9 +101,16 @@ function TabNavigator() {
         component={NotificationScreen}
         options={{
           tabBarIcon: ({ color }) => (
-            <Ionicons name="notifications" size={24} color={color} />
+            <Ionicons
+              name="notifications"
+              size={24}
+              color={activeScreen === "NotificationScreen" ? "#D17842" : color}
+            />
           ),
           tabBarLabel: () => null,
+        }}
+        listeners={{
+          tabPress: () => handleNavigation("NotificationScreen"),
         }}
       />
     </Tab.Navigator>
