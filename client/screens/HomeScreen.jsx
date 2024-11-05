@@ -161,12 +161,12 @@ const BeanCoffeeCard = ({ beanCoffee }) => {
 export default function HomeScreen() {
   const [selectedId, setSelectedId] = useState("1");
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
       <StatusBar style="light" />
       <ScrollView
         showsHorizontalScrollIndicator={false}
         showsVerticalScrollIndicator={false}
-        style={{ marginBottom: "5%" }}
+        // style={{}}
       >
         <View style={styles.innerContainer}>
           <View style={styles.headerContainer}>
@@ -247,7 +247,7 @@ export default function HomeScreen() {
           </View>
         </View>
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 }
 
@@ -257,9 +257,10 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.darkBackground,
   },
   innerContainer: {
-    flex: 1,
     width: "90%",
     alignSelf: "center",
+    height: "100%",
+    marginTop: "7%",
   },
   headerContainer: {
     flexDirection: "row",
