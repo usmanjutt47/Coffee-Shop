@@ -15,6 +15,9 @@ import AntDesign from "@expo/vector-icons/AntDesign";
 import { Entypo, FontAwesome6, Ionicons } from "@expo/vector-icons";
 import DetailScreen from "./screens/DetailScreen";
 import BeanCoffeeDetail from "./screens/BeanCoffeeDetail";
+import Login from "./screens/authentication/Login";
+import SignUp from "./screens/authentication/SignUp";
+import OnBoarding from "./screens/authentication/OnBoarding";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -124,7 +127,11 @@ export default function App() {
         screenOptions={{
           headerShown: false,
         }}
+        initialRouteName="OnBoarding"
       >
+        <Stack.Screen name="OnBoarding" component={OnBoarding} />
+        <Stack.Screen name="Login" component={Login} />
+        <Stack.Screen name="SignUp" component={SignUp} />
         <Stack.Screen name="Home" component={TabNavigator} />
         <Stack.Screen name="Cart" component={CartScreen} />
         <Stack.Screen name="Heart" component={FavoriteScreen} />
