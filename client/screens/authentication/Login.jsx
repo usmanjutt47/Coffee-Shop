@@ -42,13 +42,9 @@ export default function Login() {
           password,
         }
       );
-
       if (response.status === 200) {
         await AsyncStorage.setItem("userId", response.data.userId.toString());
-
         setSuccessModalVisible(true);
-        console.log("User ID:", response.data.userId);
-
         setEmail("");
         setPassword("");
         navigation.navigate("Home");
