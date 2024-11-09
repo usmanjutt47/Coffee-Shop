@@ -47,7 +47,10 @@ export default function SignUp() {
 
       setSuccessMessage(response.data.message);
       setModalVisible(true);
-      setTimeout(() => navigation.navigate("Login"), 2000);
+      setEmail("");
+      setPassword("");
+      setConfirmPassword("");
+      setTimeout(() => navigation.navigate("Login"));
     } catch (err) {
       setError(err.response?.data?.message || "An error occurred");
       setModalVisible(true);
