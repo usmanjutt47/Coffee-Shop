@@ -6,19 +6,53 @@ import {
   TextInput,
   TouchableOpacity,
   View,
+  Modal,
 } from "react-native";
 import React, { useState } from "react";
 import { StatusBar } from "expo-status-bar";
 import Colors from "../../constants/colors";
 import Entypo from "@expo/vector-icons/Entypo";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
-import AntDesign from "@expo/vector-icons/AntDesign";
 import { useNavigation } from "@react-navigation/native";
+import axios from "axios";
 
 export default function SignUp() {
   const [isEmail, setIsEmail] = useState(false);
   const [isPassword, setIsPassword] = useState(false);
+  const [isConfirmPassword, setIsConfirmPassword] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [error, setError] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
+  const [modalVisible, setModalVisible] = useState(false);
   const navigation = useNavigation();
+
+  const handleSignUp = async () => {
+    if (!email || !password || !confirmPassword) {
+      setError("All fields are required.");
+      setModalVisible(true);
+      return;
+    }
+
+    try {
+      const response = await axios.post(
+        "http://192.168.100.175:5000/api/users/register",
+        {
+          email,
+          password,
+          confirmPassword,
+        }
+      );
+
+      setSuccessMessage(response.data.message);
+      setModalVisible(true);
+      setTimeout(() => navigation.navigate("Login"), 2000);
+    } catch (err) {
+      setError(err.response?.data?.message || "An error occurred");
+      setModalVisible(true);
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -44,6 +78,8 @@ export default function SignUp() {
               placeholderTextColor="#9194A0"
               style={styles.inputText}
               cursorColor="#9194A0"
+              value={email}
+              onChangeText={setEmail}
               onFocus={() => setIsEmail(true)}
               onBlur={() => setIsEmail(false)}
             />
@@ -63,13 +99,19 @@ export default function SignUp() {
               placeholderTextColor="#9194A0"
               style={styles.inputText}
               cursorColor="#9194A0"
+              secureTextEntry
+              value={password}
+              onChangeText={setPassword}
               onFocus={() => setIsPassword(true)}
               onBlur={() => setIsPassword(false)}
             />
           </View>
 
           <View
-            style={[styles.passwordContainer, isPassword && styles.activeColor]}
+            style={[
+              styles.passwordContainer,
+              isConfirmPassword && styles.activeColor,
+            ]}
           >
             <MaterialIcons
               name="password"
@@ -78,19 +120,19 @@ export default function SignUp() {
               style={styles.icon}
             />
             <TextInput
-              placeholder="Enter Confirm Password"
+              placeholder="Confirm your password"
               placeholderTextColor="#9194A0"
               style={styles.inputText}
               cursorColor="#9194A0"
-              onFocus={() => setIsPassword(true)}
-              onBlur={() => setIsPassword(false)}
+              secureTextEntry
+              value={confirmPassword}
+              onChangeText={setConfirmPassword}
+              onFocus={() => setIsConfirmPassword(true)}
+              onBlur={() => setIsConfirmPassword(false)}
             />
           </View>
 
-          <TouchableOpacity
-            style={styles.btnContainer}
-            onPress={() => navigation.navigate("Login")}
-          >
+          <TouchableOpacity style={styles.btnContainer} onPress={handleSignUp}>
             <Text style={styles.btnText}>Sign up</Text>
           </TouchableOpacity>
 
@@ -100,27 +142,26 @@ export default function SignUp() {
           >
             <Text style={styles.newAccountText}>Already have an account</Text>
           </TouchableOpacity>
-
-          <Text style={styles.continueText}>Or continue with</Text>
-          <View
-            style={{
-              flexDirection: "row",
-              justifyContent: "space-between",
-              width: "55%",
-            }}
-          >
-            <TouchableOpacity style={styles.googleContainer}>
-              <AntDesign name="google" size={24} color="#D17842" />
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.googleContainer}>
-              <Entypo name="facebook-with-circle" size={24} color="#D17842" />
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.googleContainer}>
-              <AntDesign name="apple1" size={24} color="#D17842" />
-            </TouchableOpacity>
-          </View>
         </ScrollView>
       </ImageBackground>
+
+      <Modal
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => setModalVisible(false)}
+      >
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalText}>{successMessage || error}</Text>
+            <TouchableOpacity
+              style={styles.closeButton}
+              onPress={() => setModalVisible(false)}
+            >
+              <Text style={styles.closeButtonText}>Close</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 }
@@ -201,14 +242,6 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "bold",
   },
-  forgotText: {
-    color: Colors.secondaryOrange,
-    marginTop: 15,
-    textAlign: "right",
-    fontSize: 14,
-    fontWeight: "bold",
-    alignSelf: "flex-end",
-  },
   newAccountContainer: {
     width: "100%",
     height: 41,
@@ -223,20 +256,30 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     fontSize: 14,
   },
-  continueText: {
-    fontSize: 14,
-    fontWeight: "bold",
-    color: Colors.secondaryOrange,
-    marginTop: "20%",
-    textAlign: "center",
-    marginBottom: "5%",
-  },
-  googleContainer: {
-    height: 60,
-    width: 60,
-    backgroundColor: "#141921",
-    borderRadius: 10,
+  modalContainer: {
+    flex: 1,
     justifyContent: "center",
     alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+  },
+  modalContent: {
+    width: "80%",
+    padding: 20,
+    backgroundColor: "#fff",
+    borderRadius: 10,
+  },
+  modalText: {
+    fontSize: 16,
+    textAlign: "center",
+  },
+  closeButton: {
+    marginTop: 15,
+    backgroundColor: Colors.secondaryOrange,
+    padding: 10,
+    borderRadius: 5,
+  },
+  closeButtonText: {
+    color: Colors.white,
+    textAlign: "center",
   },
 });
