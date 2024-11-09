@@ -164,7 +164,6 @@ export default function HomeScreen() {
       <ScrollView
         showsHorizontalScrollIndicator={false}
         showsVerticalScrollIndicator={false}
-        // style={{}}
       >
         <View style={styles.innerContainer}>
           <View style={styles.headerContainer}>
