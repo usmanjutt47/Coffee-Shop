@@ -1,5 +1,5 @@
 import { StyleSheet } from "react-native";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   NavigationContainer,
   useNavigation,
@@ -18,6 +18,7 @@ import BeanCoffeeDetail from "./screens/BeanCoffeeDetail";
 import Login from "./screens/authentication/Login";
 import SignUp from "./screens/authentication/SignUp";
 import OnBoarding from "./screens/authentication/OnBoarding";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -121,13 +122,36 @@ function TabNavigator() {
 }
 
 export default function App() {
+  const [isLoggedIn, setIsLoggedIn] = useState(null);
+  useEffect(() => {
+    const checkLoginStatus = async () => {
+      try {
+        const userId = await AsyncStorage.getItem("userId");
+        if (userId) {
+          setIsLoggedIn(true);
+        } else {
+          setIsLoggedIn(false);
+        }
+      } catch (error) {
+        console.error("Error checking login status:", error);
+        setIsLoggedIn(false);
+      }
+    };
+
+    checkLoginStatus();
+  }, []);
+
+  if (isLoggedIn === null) {
+    return null;
+  }
+
   return (
     <NavigationContainer>
       <Stack.Navigator
         screenOptions={{
           headerShown: false,
         }}
-        initialRouteName="OnBoarding"
+        initialRouteName={isLoggedIn ? "Home" : "OnBoarding"}
       >
         <Stack.Screen name="OnBoarding" component={OnBoarding} />
         <Stack.Screen name="Login" component={Login} />
