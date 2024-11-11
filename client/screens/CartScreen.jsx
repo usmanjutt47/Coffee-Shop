@@ -17,14 +17,13 @@ export default function CartScreen() {
   return (
     <View style={styles.container}>
       <StatusBar style="light" />
-      <View style={{ marginTop: "10%" }}>
-        <View style={styles.innerContainer}>
-          <ScrollView
-            style={{ flex: 1 }}
-            contentContainerStyle={{ flex: 1 }}
-            showsHorizontalScrollIndicator={false}
-            showsVerticalScrollIndicator={false}
-          >
+      <ScrollView
+        style={{ flex: 1 }}
+        showsHorizontalScrollIndicator={false}
+        showsVerticalScrollIndicator={false}
+      >
+        <View style={{ marginTop: "10%" }}>
+          <View style={styles.innerContainer}>
             <View style={styles.headerContainer}>
               <TouchableOpacity style={styles.btnContainer}>
                 <Image
@@ -145,9 +144,9 @@ export default function CartScreen() {
                 </LinearGradient>
               </View>
             </View>
-          </ScrollView>
+          </View>
         </View>
-      </View>
+      </ScrollView>
     </View>
   );
 }
