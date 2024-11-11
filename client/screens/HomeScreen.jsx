@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   FlatList,
   Image,
@@ -8,6 +8,7 @@ import {
   TextInput,
   TouchableOpacity,
   View,
+  Animated,
 } from "react-native";
 import Colors from "../constants/colors";
 import { StatusBar } from "expo-status-bar";
@@ -53,43 +54,49 @@ const categoryImg = [
     price: "4.00",
   },
 ];
-const CoffeeCard = ({ coffee }) => {
+const CoffeeCard = ({ coffee, animationValue }) => {
   const navigation = useNavigation();
 
   const handlePress = () => {
     navigation.navigate("Detail", { coffee });
   };
   return (
-    <TouchableOpacity style={styles.cardContainer} onPress={handlePress}>
-      <View style={styles.imageContainer}>
-        <Image source={{ uri: coffee.image }} style={styles.coffeeImage} />
-        <View style={styles.ratingContainer}>
-          <AntDesign name="star" size={16} color={Colors.secondaryOrange} />
-          <Text style={styles.ratingText}>{coffee.rating}</Text>
-        </View>
-      </View>
-      <View style={styles.contentContainer}>
-        <View style={styles.titleRow}>
-          <Text style={styles.title} numberOfLines={1} ellipsizeMode="tail">
-            {coffee.title}
-          </Text>
-        </View>
-        <Text style={styles.description} numberOfLines={1} ellipsizeMode="tail">
-          {coffee.description}
-        </Text>
-        <View style={styles.footerRow}>
-          <View style={{ flexDirection: "row" }}>
-            <Text style={[styles.price, { color: Colors.secondaryOrange }]}>
-              ${" "}
-            </Text>
-            <Text style={styles.price}>{coffee.price}</Text>
+    <Animated.View style={[styles.cardContainer, { opacity: animationValue }]}>
+      <TouchableOpacity onPress={handlePress}>
+        <View style={styles.imageContainer}>
+          <Image source={{ uri: coffee.image }} style={styles.coffeeImage} />
+          <View style={styles.ratingContainer}>
+            <AntDesign name="star" size={16} color={Colors.secondaryOrange} />
+            <Text style={styles.ratingText}>{coffee.rating}</Text>
           </View>
-          <TouchableOpacity style={styles.plusButton}>
-            <AntDesign name="plus" size={16} color={Colors.white} />
-          </TouchableOpacity>
         </View>
-      </View>
-    </TouchableOpacity>
+        <View style={styles.contentContainer}>
+          <View style={styles.titleRow}>
+            <Text style={styles.title} numberOfLines={1} ellipsizeMode="tail">
+              {coffee.title}
+            </Text>
+          </View>
+          <Text
+            style={styles.description}
+            numberOfLines={1}
+            ellipsizeMode="tail"
+          >
+            {coffee.description}
+          </Text>
+          <View style={styles.footerRow}>
+            <View style={{ flexDirection: "row" }}>
+              <Text style={[styles.price, { color: Colors.secondaryOrange }]}>
+                ${" "}
+              </Text>
+              <Text style={styles.price}>{coffee.price}</Text>
+            </View>
+            <TouchableOpacity style={styles.plusButton}>
+              <AntDesign name="plus" size={16} color={Colors.white} />
+            </TouchableOpacity>
+          </View>
+        </View>
+      </TouchableOpacity>
+    </Animated.View>
   );
 };
 
@@ -127,6 +134,7 @@ const BeanCoffeeCard = ({ beanCoffee }) => {
       price: beanCoffee.price,
     });
   };
+
   return (
     <TouchableOpacity style={styles.cardContainer} onPress={handlePress}>
       <View style={styles.imageContainer}>
@@ -158,28 +166,47 @@ const BeanCoffeeCard = ({ beanCoffee }) => {
 };
 export default function HomeScreen() {
   const [selectedId, setSelectedId] = useState("1");
+  const animatedValues = useRef(
+    categoryImg.map(() => new Animated.Value(0))
+  ).current;
+  useEffect(() => {
+    animateItems();
+  }, []);
+  const animateItems = () => {
+    const animations = animatedValues.map((anim, index) =>
+      Animated.timing(anim, {
+        toValue: 1,
+        duration: 600,
+        delay: index * 200,
+        useNativeDriver: true,
+      })
+    );
+    Animated.stagger(200, animations).start();
+  };
   return (
     <View style={styles.container}>
       <StatusBar style="light" />
+      <View style={{ width: "90%", alignSelf: "center", marginTop: "10%" }}>
+        <View style={styles.headerContainer}>
+          <TouchableOpacity style={styles.btnContainer}>
+            <Image
+              source={require("../assets/images/drawer.png")}
+              style={styles.image}
+            />
+          </TouchableOpacity>
+          <TouchableOpacity>
+            <Image
+              source={{ uri: "https://via.placeholder.com/50" }}
+              style={styles.profileImage}
+            />
+          </TouchableOpacity>
+        </View>
+      </View>
       <ScrollView
         showsHorizontalScrollIndicator={false}
         showsVerticalScrollIndicator={false}
       >
         <View style={styles.innerContainer}>
-          <View style={styles.headerContainer}>
-            <TouchableOpacity style={styles.btnContainer}>
-              <Image
-                source={require("../assets/images/drawer.png")}
-                style={styles.image}
-              />
-            </TouchableOpacity>
-            <TouchableOpacity>
-              <Image
-                source={{ uri: "https://via.placeholder.com/50" }}
-                style={styles.profileImage}
-              />
-            </TouchableOpacity>
-          </View>
           <Text style={styles.heading}>Find the best coffee for you</Text>
           <View style={styles.inputContainer}>
             <AntDesign
@@ -226,7 +253,12 @@ export default function HomeScreen() {
           <View>
             <FlatList
               data={categoryImg}
-              renderItem={({ item }) => <CoffeeCard coffee={item} />}
+              renderItem={({ item, index }) => (
+                <CoffeeCard
+                  coffee={item}
+                  animationValue={animatedValues[index]}
+                />
+              )}
               keyExtractor={(item) => item.id}
               horizontal
               showsHorizontalScrollIndicator={false}
@@ -257,7 +289,6 @@ const styles = StyleSheet.create({
     width: "90%",
     alignSelf: "center",
     height: "100%",
-    marginTop: "10%",
   },
   headerContainer: {
     flexDirection: "row",
