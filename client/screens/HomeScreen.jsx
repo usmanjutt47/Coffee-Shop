@@ -257,7 +257,7 @@ const styles = StyleSheet.create({
     width: "90%",
     alignSelf: "center",
     height: "100%",
-    marginTop: "7%",
+    marginTop: "10%",
   },
   headerContainer: {
     flexDirection: "row",
