@@ -1,16 +1,41 @@
 import React, { useState } from "react";
-import { View, Image, Text, StyleSheet, Pressable } from "react-native";
+import {
+  View,
+  Image,
+  Text,
+  StyleSheet,
+  Pressable,
+  TouchableOpacity,
+} from "react-native";
 import Colors from "../constants/colors";
-import { AntDesign, FontAwesome6 } from "@expo/vector-icons";
+import { AntDesign, FontAwesome, FontAwesome6 } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
 
 const DetailScreen = ({ route }) => {
   const [selectedSize, setSelectedSize] = useState("250gm");
   const { coffee } = route.params;
+  const navigation = useNavigation();
+
+  const handelBack = () => {
+    navigation.goBack();
+  };
 
   return (
     <View style={styles.container}>
       <View style={styles.imageContainer}>
         <Image source={{ uri: coffee.image }} style={styles.image} />
+
+        <View style={styles.backContainer}>
+          <TouchableOpacity
+            style={styles.backInnerContainer}
+            onPress={handelBack}
+          >
+            <AntDesign name="left" size={24} color="#52555A" />
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.backInnerContainer}>
+            <FontAwesome name="heart" size={20} color="red" />
+          </TouchableOpacity>
+        </View>
         <View style={styles.overlay}>
           <View style={styles.overlayContent}>
             <View>
@@ -263,6 +288,23 @@ const styles = StyleSheet.create({
     color: Colors.white,
     fontWeight: "bold",
     fontSize: 16,
+  },
+  backContainer: {
+    height: 60,
+    width: "90%",
+    position: "absolute",
+    alignSelf: "center",
+    marginTop: "10%",
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  backInnerContainer: {
+    height: 35,
+    width: 35,
+    backgroundColor: "#21262E",
+    borderRadius: 10,
+    justifyContent: "center",
+    alignItems: "center",
   },
 });
 
