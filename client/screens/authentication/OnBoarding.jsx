@@ -9,6 +9,7 @@ import React from "react";
 import Colors from "../../constants/colors";
 import { StatusBar } from "expo-status-bar";
 import { useNavigation } from "@react-navigation/native";
+import Animated, { FadeIn, FadeInDown } from "react-native-reanimated";
 
 export default function OnBoarding() {
   const navigation = useNavigation();
@@ -19,7 +20,10 @@ export default function OnBoarding() {
         source={require("../../assets/images/welcomeImage.png")}
         style={{ height: "100%", width: "100%" }}
       >
-        <View style={styles.welcomeContainer}>
+        <Animated.View
+          style={styles.welcomeContainer}
+          entering={FadeInDown.duration(600)}
+        >
           <Text style={styles.heading}>Discover Your Dream Job here</Text>
           <Text style={styles.text}>
             Explore all the existing job roles based on your interest and study
@@ -39,7 +43,7 @@ export default function OnBoarding() {
               <Text style={styles.registerText}>Register</Text>
             </TouchableOpacity>
           </View>
-        </View>
+        </Animated.View>
       </ImageBackground>
     </View>
   );
