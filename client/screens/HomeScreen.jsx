@@ -9,11 +9,14 @@ import {
   TouchableOpacity,
   View,
   Animated,
+  ActivityIndicator,
 } from "react-native";
 import Colors from "../constants/colors";
 import { StatusBar } from "expo-status-bar";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import { useNavigation } from "@react-navigation/native";
+import axios from "axios";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const DATA = [
   { id: "1", title: "All" },
@@ -55,11 +58,57 @@ const categoryImg = [
   },
 ];
 const CoffeeCard = ({ coffee, animationValue }) => {
+  const [isAdding, setIsAdding] = useState(false);
+  const [isAdded, setIsAdded] = useState(false);
   const navigation = useNavigation();
 
   const handlePress = () => {
     navigation.navigate("Detail", { coffee });
   };
+
+  const handleAddToCart = async () => {
+    setIsAdding(true);
+    try {
+      const userId = await AsyncStorage.getItem("userId");
+
+      if (!userId) {
+        setIsAdding(false);
+        return;
+      }
+
+      const url = "http://192.168.10.6:5000/api/users/add-to-cart";
+
+      const formData = new FormData();
+      formData.append("name", coffee.title);
+      formData.append("price", coffee.price);
+      formData.append("description", coffee.description);
+      formData.append("userId", userId);
+
+      formData.append("image", {
+        uri: coffee.image,
+        type: "image/jpeg",
+        name: `${Date.now()}-image.jpg`,
+      });
+
+      const response = await axios.post(url, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+      // Agar product pehle se cart mein hai to response mein isCart true hoga
+      if (response.data.isCart) {
+        setIsAdded(true); // `isAdded` ko true kar dete hain takki `check` icon show ho
+      } else {
+        console.log("Error in response:", response);
+      }
+    } catch (error) {
+      console.log("Error in image upload:", error);
+    } finally {
+      setIsAdding(false);
+    }
+  };
+
   return (
     <Animated.View style={[styles.cardContainer, { opacity: animationValue }]}>
       <TouchableOpacity onPress={handlePress}>
@@ -90,8 +139,18 @@ const CoffeeCard = ({ coffee, animationValue }) => {
               </Text>
               <Text style={styles.price}>{coffee.price}</Text>
             </View>
-            <TouchableOpacity style={styles.plusButton}>
-              <AntDesign name="plus" size={16} color={Colors.white} />
+            <TouchableOpacity
+              style={styles.plusButton}
+              onPress={handleAddToCart}
+              disabled={isAdding || isAdded}
+            >
+              {isAdding ? (
+                <ActivityIndicator size="small" color={Colors.white} />
+              ) : isAdded ? (
+                <AntDesign name="check" size={16} color={Colors.white} />
+              ) : (
+                <AntDesign name="plus" size={16} color={Colors.white} />
+              )}
             </TouchableOpacity>
           </View>
         </View>
@@ -126,6 +185,8 @@ const categoryBeans = [
 
 const BeanCoffeeCard = ({ beanCoffee }) => {
   const navigation = useNavigation();
+  const [isAdding, setIsAdding] = useState(false);
+  const [isAdded, setIsAdded] = useState(false);
   const handlePress = () => {
     navigation.navigate("BeanCoffeeDetail", {
       image: beanCoffee.image1,
@@ -133,6 +194,48 @@ const BeanCoffeeCard = ({ beanCoffee }) => {
       description: beanCoffee.description,
       price: beanCoffee.price,
     });
+  };
+
+  const handleAddToCart = async () => {
+    setIsAdding(true);
+    try {
+      const userId = await AsyncStorage.getItem("userId");
+
+      if (!userId) {
+        setIsAdding(false);
+        return;
+      }
+
+      const url = "http://192.168.10.6:5000/api/users/add-to-cart";
+
+      const formData = new FormData();
+      formData.append("name", beanCoffee.title);
+      formData.append("price", beanCoffee.price);
+      formData.append("description", beanCoffee.description);
+      formData.append("userId", userId);
+
+      formData.append("image", {
+        uri: beanCoffee.image1,
+        type: "image/jpeg",
+        name: `${Date.now()}-image.jpg`,
+      });
+
+      const response = await axios.post(url, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+      if (response.data.isCart) {
+        setIsAdded(true);
+      } else {
+        console.log("Error in response:", response);
+      }
+    } catch (error) {
+      console.log("Error in image upload:", error);
+    } finally {
+      setIsAdding(false);
+    }
   };
 
   return (
@@ -156,14 +259,25 @@ const BeanCoffeeCard = ({ beanCoffee }) => {
             </Text>
             <Text style={styles.price}>{beanCoffee.price}</Text>
           </View>
-          <TouchableOpacity style={styles.plusButton}>
-            <AntDesign name="plus" size={16} color={Colors.white} />
+          <TouchableOpacity
+            style={styles.plusButton}
+            onPress={handleAddToCart}
+            disabled={isAdding || isAdded}
+          >
+            {isAdding ? (
+              <ActivityIndicator size="small" color={Colors.white} />
+            ) : isAdded ? (
+              <AntDesign name="check" size={16} color={Colors.white} />
+            ) : (
+              <AntDesign name="plus" size={16} color={Colors.white} />
+            )}
           </TouchableOpacity>
         </View>
       </View>
     </TouchableOpacity>
   );
 };
+
 export default function HomeScreen() {
   const [selectedId, setSelectedId] = useState("1");
   const animatedValues = useRef(
@@ -378,7 +492,7 @@ const styles = StyleSheet.create({
   ratingContainer: {
     position: "absolute",
     top: 0,
-    right: 7,
+    right: 0,
     flexDirection: "row",
     alignItems: "center",
     backgroundColor: "rgba(0, 0, 0, 0.5)",
