@@ -9,7 +9,7 @@ import React from "react";
 import Colors from "../../constants/colors";
 import { StatusBar } from "expo-status-bar";
 import { useNavigation } from "@react-navigation/native";
-import Animated, { FadeIn, FadeInDown } from "react-native-reanimated";
+import Animated, { FadeInDown } from "react-native-reanimated";
 
 export default function OnBoarding() {
   const navigation = useNavigation();
