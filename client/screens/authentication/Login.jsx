@@ -6,7 +6,7 @@ import {
   TextInput,
   TouchableOpacity,
   View,
-  Modal,
+  Modal
 } from "react-native";
 import React, { useState } from "react";
 import { StatusBar } from "expo-status-bar";
@@ -36,10 +36,10 @@ export default function Login() {
 
     try {
       const response = await axios.post(
-        "http://192.168.10.6:5000/api/users/login",
+        "http://192.168.100.175:5000/api/users/login",
         {
           email,
-          password,
+          password
         }
       );
       if (response.status === 200) {
@@ -120,7 +120,7 @@ export default function Login() {
             style={{
               flexDirection: "row",
               justifyContent: "space-between",
-              width: "55%",
+              width: "55%"
             }}
           >
             <TouchableOpacity style={styles.googleContainer}>
@@ -180,10 +180,10 @@ export default function Login() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#0C0F14",
+    backgroundColor: "#0C0F14"
   },
   backgroundImage: {
-    flex: 1,
+    flex: 1
   },
   scrollViewContent: {
     flexGrow: 1,
@@ -191,14 +191,14 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     paddingVertical: 50,
     width: "90%",
-    alignSelf: "center",
+    alignSelf: "center"
   },
   heading: {
     fontSize: 30,
     fontWeight: "bold",
     color: Colors.secondaryOrange,
     marginTop: 30,
-    textAlign: "center",
+    textAlign: "center"
   },
   headingText: {
     fontSize: 20,
@@ -206,7 +206,7 @@ const styles = StyleSheet.create({
     width: "60%",
     textAlign: "center",
     marginTop: 10,
-    alignSelf: "center",
+    alignSelf: "center"
   },
   inputContainer: {
     flexDirection: "row",
@@ -216,19 +216,19 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     marginTop: 30,
     backgroundColor: "#141921",
-    paddingHorizontal: 10,
+    paddingHorizontal: 10
   },
   activeColor: {
     borderColor: Colors.secondaryOrange,
-    borderWidth: 1,
+    borderWidth: 1
   },
   inputText: {
     color: "#9194A0",
     paddingLeft: 10,
-    flex: 1,
+    flex: 1
   },
   icon: {
-    paddingLeft: 10,
+    paddingLeft: 10
   },
   passwordContainer: {
     flexDirection: "row",
@@ -238,7 +238,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     marginTop: 15,
     backgroundColor: "#141921",
-    paddingHorizontal: 10,
+    paddingHorizontal: 10
   },
   btnContainer: {
     height: 50,
@@ -247,12 +247,12 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 10,
-    marginTop: 20,
+    marginTop: 20
   },
   btnText: {
     color: Colors.white,
     fontSize: 20,
-    fontWeight: "bold",
+    fontWeight: "bold"
   },
   forgotText: {
     color: Colors.secondaryOrange,
@@ -260,7 +260,7 @@ const styles = StyleSheet.create({
     textAlign: "right",
     fontSize: 14,
     fontWeight: "bold",
-    alignSelf: "flex-end",
+    alignSelf: "flex-end"
   },
   newAccountContainer: {
     width: "100%",
@@ -269,12 +269,12 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     justifyContent: "center",
     alignItems: "center",
-    marginTop: "5%",
+    marginTop: "5%"
   },
   newAccountText: {
     color: Colors.white,
     fontWeight: "bold",
-    fontSize: 14,
+    fontSize: 14
   },
   continueText: {
     fontSize: 14,
@@ -282,7 +282,7 @@ const styles = StyleSheet.create({
     color: Colors.secondaryOrange,
     marginTop: "45%",
     textAlign: "center",
-    marginBottom: "5%",
+    marginBottom: "5%"
   },
   googleContainer: {
     height: 60,
@@ -290,34 +290,34 @@ const styles = StyleSheet.create({
     backgroundColor: "#141921",
     borderRadius: 10,
     justifyContent: "center",
-    alignItems: "center",
+    alignItems: "center"
   },
   modalBackground: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    backgroundColor: "rgba(0, 0, 0, 0.5)"
   },
   modalContainer: {
     width: "80%",
     padding: 20,
     backgroundColor: "#2C2F38",
     borderRadius: 10,
-    alignItems: "center",
+    alignItems: "center"
   },
   modalText: {
     fontSize: 18,
     color: "#fff",
-    marginBottom: 20,
+    marginBottom: 20
   },
   modalButton: {
     paddingVertical: 10,
     paddingHorizontal: 20,
     backgroundColor: Colors.secondaryOrange,
-    borderRadius: 5,
+    borderRadius: 5
   },
   modalButtonText: {
     color: "#fff",
-    fontSize: 16,
-  },
+    fontSize: 16
+  }
 });
