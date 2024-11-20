@@ -9,7 +9,7 @@ import {
   TouchableOpacity,
   View,
   Animated,
-  ActivityIndicator,
+  ActivityIndicator
 } from "react-native";
 import Colors from "../constants/colors";
 import { StatusBar } from "expo-status-bar";
@@ -28,7 +28,7 @@ const DATA = [
   { id: "7", title: "Macchiato" },
   { id: "8", title: "Flat White" },
   { id: "9", title: "Ristretto" },
-  { id: "10", title: "Affogato" },
+  { id: "10", title: "Affogato" }
 ];
 
 const categoryImg = [
@@ -38,7 +38,7 @@ const categoryImg = [
     image: "https://via.placeholder.com/136",
     rating: "4.5",
     description: "A classic Italian coffee.",
-    price: "3.50",
+    price: "3.50"
   },
   {
     id: "2",
@@ -46,7 +46,7 @@ const categoryImg = [
     image: "https://via.placeholder.com/136",
     rating: "4.8",
     description: "Strong and bold flavor.",
-    price: "2.75",
+    price: "2.75"
   },
   {
     id: "3",
@@ -54,8 +54,8 @@ const categoryImg = [
     image: "https://via.placeholder.com/136",
     rating: "4.3",
     description: "Smooth and creamy.",
-    price: "4.00",
-  },
+    price: "4.00"
+  }
 ];
 const CoffeeCard = ({ coffee, animationValue }) => {
   const [isAdding, setIsAdding] = useState(false);
@@ -76,7 +76,7 @@ const CoffeeCard = ({ coffee, animationValue }) => {
         return;
       }
 
-      const url = "http://192.168.10.6:5000/api/users/add-to-cart";
+      const url = "http://192.168.100.175:5000/api/users/add-to-cart";
 
       const formData = new FormData();
       formData.append("name", coffee.title);
@@ -87,18 +87,17 @@ const CoffeeCard = ({ coffee, animationValue }) => {
       formData.append("image", {
         uri: coffee.image,
         type: "image/jpeg",
-        name: `${Date.now()}-image.jpg`,
+        name: `${Date.now()}-image.jpg`
       });
 
       const response = await axios.post(url, formData, {
         headers: {
-          "Content-Type": "multipart/form-data",
-        },
+          "Content-Type": "multipart/form-data"
+        }
       });
 
-      // Agar product pehle se cart mein hai to response mein isCart true hoga
       if (response.data.isCart) {
-        setIsAdded(true); // `isAdded` ko true kar dete hain takki `check` icon show ho
+        setIsAdded(true);
       } else {
         console.log("Error in response:", response);
       }
@@ -165,22 +164,22 @@ const categoryBeans = [
     title: "Robusta Beans",
     image1: "https://via.placeholder.com/136",
     description: "Medium Roasted",
-    price: "3.50",
+    price: "3.50"
   },
   {
     id: "2",
     title: "Cappuccino",
     image1: "https://via.placeholder.com/136",
     description: "With Steamed Milk",
-    price: "2.75",
+    price: "2.75"
   },
   {
     id: "3",
     title: " Arabica",
     image1: "https://via.placeholder.com/136",
     description: "The most common coffee bean,",
-    price: "4.00",
-  },
+    price: "4.00"
+  }
 ];
 
 const BeanCoffeeCard = ({ beanCoffee }) => {
@@ -192,7 +191,7 @@ const BeanCoffeeCard = ({ beanCoffee }) => {
       image: beanCoffee.image1,
       title: beanCoffee.title,
       description: beanCoffee.description,
-      price: beanCoffee.price,
+      price: beanCoffee.price
     });
   };
 
@@ -206,7 +205,7 @@ const BeanCoffeeCard = ({ beanCoffee }) => {
         return;
       }
 
-      const url = "http://192.168.10.6:5000/api/users/add-to-cart";
+      const url = "http://192.168.100.175:5000/api/users/add-to-cart";
 
       const formData = new FormData();
       formData.append("name", beanCoffee.title);
@@ -217,13 +216,13 @@ const BeanCoffeeCard = ({ beanCoffee }) => {
       formData.append("image", {
         uri: beanCoffee.image1,
         type: "image/jpeg",
-        name: `${Date.now()}-image.jpg`,
+        name: `${Date.now()}-image.jpg`
       });
 
       const response = await axios.post(url, formData, {
         headers: {
-          "Content-Type": "multipart/form-data",
-        },
+          "Content-Type": "multipart/form-data"
+        }
       });
 
       if (response.data.isCart) {
@@ -292,7 +291,7 @@ export default function HomeScreen() {
         toValue: 1,
         duration: 600,
         delay: index * 200,
-        useNativeDriver: true,
+        useNativeDriver: true
       })
     );
     Animated.stagger(200, animations).start();
@@ -348,7 +347,7 @@ export default function HomeScreen() {
                   <Text
                     style={[
                       styles.itemText,
-                      selectedId === item.id && styles.selectedItemText,
+                      selectedId === item.id && styles.selectedItemText
                     ]}
                   >
                     {item.title}
@@ -397,22 +396,22 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.darkBackground,
+    backgroundColor: Colors.darkBackground
   },
   innerContainer: {
     width: "90%",
     alignSelf: "center",
-    height: "100%",
+    height: "100%"
   },
   headerContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
-    marginTop: 10,
+    marginTop: 10
   },
   image: {
     width: 25,
     height: 25,
-    resizeMode: "contain",
+    resizeMode: "contain"
   },
   btnContainer: {
     height: 50,
@@ -421,19 +420,19 @@ const styles = StyleSheet.create({
     borderWidth: 3,
     borderColor: Colors.mediumBackground,
     justifyContent: "center",
-    alignItems: "center",
+    alignItems: "center"
   },
   profileImage: {
     width: 50,
     height: 50,
-    borderRadius: 25,
+    borderRadius: 25
   },
   heading: {
     fontWeight: "bold",
     color: Colors.white,
     fontSize: 28,
     width: "60%",
-    marginTop: 20,
+    marginTop: 20
   },
   inputContainer: {
     flexDirection: "row",
@@ -441,34 +440,34 @@ const styles = StyleSheet.create({
     height: 45,
     backgroundColor: Colors.mediumBackground,
     alignItems: "center",
-    marginTop: 20,
+    marginTop: 20
   },
   icon: {
     paddingLeft: 10,
-    paddingRight: 10,
+    paddingRight: 10
   },
   placeHolder: {
     color: Colors.gray,
     flex: 1,
-    height: "100%",
+    height: "100%"
   },
   itemContainer: {
-    alignItems: "center",
+    alignItems: "center"
   },
   itemText: {
     color: Colors.white,
     fontWeight: "bold",
-    fontSize: 16,
+    fontSize: 16
   },
   selectedItemText: {
-    color: Colors.secondaryOrange,
+    color: Colors.secondaryOrange
   },
   selectedDot: {
     width: 6,
     height: 6,
     borderRadius: 3,
     backgroundColor: Colors.secondaryOrange,
-    marginTop: 4,
+    marginTop: 4
   },
   cardContainer: {
     backgroundColor: Colors.mediumBackground,
@@ -477,17 +476,17 @@ const styles = StyleSheet.create({
     height: 250,
     justifyContent: "center",
     alignItems: "center",
-    marginRight: 10,
+    marginRight: 10
   },
   imageContainer: {
     position: "relative",
     width: "100%",
-    alignItems: "center",
+    alignItems: "center"
   },
   coffeeImage: {
     width: 135,
     height: 135,
-    borderRadius: 16,
+    borderRadius: 16
   },
   ratingContainer: {
     position: "absolute",
@@ -498,59 +497,59 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(0, 0, 0, 0.5)",
     padding: 4,
     borderTopRightRadius: 16,
-    borderBottomLeftRadius: 16,
+    borderBottomLeftRadius: 16
   },
   ratingText: {
     fontSize: 14,
     color: Colors.white,
-    marginLeft: 5,
+    marginLeft: 5
   },
   contentContainer: {
-    paddingVertical: 10,
+    paddingVertical: 10
   },
   titleRow: {
     flexDirection: "row",
     justifyContent: "space-between",
-    alignItems: "center",
+    alignItems: "center"
   },
   title: {
     fontSize: 16,
     fontWeight: "bold",
-    color: Colors.white,
+    color: Colors.white
   },
   description: {
     fontSize: 12,
     color: Colors.lightGray,
     marginTop: 5,
-    fontWeight: "regular",
+    fontWeight: "regular"
   },
   footerRow: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    marginTop: 10,
+    marginTop: 10
   },
   price: {
     fontSize: 16,
     fontWeight: "bold",
-    color: Colors.white,
+    color: Colors.white
   },
   plusButton: {
     backgroundColor: Colors.secondaryOrange,
     borderRadius: 5,
     padding: 5,
-    alignItems: "center",
+    alignItems: "center"
   },
   containerStyle: {
     marginTop: "7%",
     gap: 10,
-    marginBottom: "6%",
+    marginBottom: "6%"
   },
   coffeeHeading: {
     fontWeight: "bold",
     fontSize: 16,
     marginTop: "5%",
     marginBottom: "5%",
-    color: Colors.white,
-  },
+    color: Colors.white
+  }
 });
