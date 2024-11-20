@@ -37,7 +37,7 @@ export default function SignUp() {
 
     try {
       const response = await axios.post(
-        "http://192.168.10.6:5000/api/users/register",
+        "http://192.168.100.175:5000/api/users/register",
         {
           email,
           password,
