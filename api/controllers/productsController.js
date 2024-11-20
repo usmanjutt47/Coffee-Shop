@@ -13,21 +13,19 @@ const createAddToCart = async (req, res) => {
       return res.status(400).json({ message: "Price must be a valid number." });
     }
 
-    // Pehle check karo ki ye product pehle se user ke cart mein hai ya nahi
     const existingProduct = await Product.findOne({
       userId,
       name,
-      isCart: true,
+      isCart: true
     });
 
     if (existingProduct) {
       return res.status(200).json({
         message: "Product is already in cart",
-        isCart: true,
+        isCart: true
       });
     }
 
-    // Agar pehle se nahi hai to naye product ko cart mein add karo
     const baseURL = "http://localhost:5000";
     const imagePath = req.file ? req.file.path : null;
     const imageURL = imagePath ? `${baseURL}/${imagePath}` : null;
@@ -38,13 +36,13 @@ const createAddToCart = async (req, res) => {
       price: numericPrice,
       userId,
       image: imageURL,
-      isCart: true,
+      isCart: true
     });
     await newProduct.save();
 
     res.status(201).json({
       message: "Product added to cart successfully",
-      isCart: true,
+      isCart: true
     });
   } catch (error) {
     console.error("Error creating product:", error.message);
@@ -63,19 +61,19 @@ const getAddToCart = async (req, res) => {
 
     res.status(200).json({
       message: "Products retrieved successfully",
-      products,
+      products
     });
   } catch (error) {
     console.error("Error retrieving products:", error.message);
 
     res.status(500).json({
       message: "Error retrieving products",
-      error: error.message,
+      error: error.message
     });
   }
 };
 
 module.exports = {
   createAddToCart,
-  getAddToCart,
+  getAddToCart
 };
